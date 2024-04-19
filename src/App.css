@@ -7,26 +7,36 @@ body {
 }
 
 .top-bar {
-  @apply flex justify-between w-full;
+  @apply flex justify-between w-full items-center;
 }
 .container {
-  @apply p-4 h-lvh pb-12 flex flex-col justify-between items-center bg-white-bg max-w-full;
+  @apply p-5 h-lvh pb-16 flex flex-col justify-between items-center bg-white-bg max-w-full;
 }
 .home-container {
   @apply h-lvh flex flex-col justify-center items-center bg-white-bg max-w-full;
 }
 .home-layout {
-  @apply items-center rounded-3xl flex flex-col text-white-text w-10/12 h-1/2 bg-white-color justify-around p-6;
+  @apply items-center rounded-3xl flex flex-col  w-10/12 h-[45%]  justify-around p-6;
+  @apply text-white-text bg-white-color;
 }
 
 .game-layout {
-  @apply w-full h-1/2 bg-white-color flex flex-wrap border-2 border-white-text;
+  @apply w-full h-1/2 flex flex-wrap border-2;
+  @apply bg-white-color  border-white-text;
 }
 .items {
-  @apply text-white-text flex justify-center items-center w-1/3 h-1/3   border-white-text border-2;
+  @apply flex justify-center items-center w-1/3 h-1/3;
+  @apply text-white-text  border-white-text border-2;
 }
 .totel-box {
-  @apply w-24 h-16 bg-white-text text-white-bg rounded-2xl mt-3 flex justify-center items-center;
+  @apply w-28 h-20  rounded-2xl mt-3 flex flex-col justify-center items-center;
+  @apply bg-white-text text-white-bg;
 }
+
+.loading-container {
+  @apply flex flex-col justify-center items-center w-full h-lvh;
+  @apply bg-white-bg text-white-text;
+}
+
 /* white --> textColor-[#0B4279] bg-[#EDF5FD] color-[#D6C7F9] */
 /* dark --> textColor-[#86BDF4] bg-[#020A12] color-[#1B0C3E] */

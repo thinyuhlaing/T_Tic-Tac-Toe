@@ -17,14 +17,16 @@ const value = [
   { number: 9, toShow: "" },
 ];
 interface AppSlice {
-  numbers: number[];
-  values: { number: number; toShow: string }[];
+  Xnumbers: number[];
+  Onumbers: number[];
 
+  values: { number: number; toShow: string }[];
   isLoading: boolean;
   error: string | null;
 }
 const initialState: AppSlice = {
-  numbers: [],
+  Xnumbers: [],
+  Onumbers: [],
   values: [],
   isLoading: false,
   error: null,
@@ -33,8 +35,11 @@ export const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    addNumbers: (state, action: PayloadAction<number>) => {
-      state.numbers = [...state.numbers, action.payload];
+    addXnumbers: (state, action: PayloadAction<number>) => {
+      state.Xnumbers = [...state.Xnumbers, action.payload];
+    },
+    addOnumbers: (state, action: PayloadAction<number>) => {
+      state.Onumbers = [...state.Onumbers, action.payload];
     },
     addValues: (state, action: PayloadAction<type>) => {
       state.values = state.values.map((item) =>
@@ -46,7 +51,14 @@ export const appSlice = createSlice({
     setValues: (state) => {
       state.values = [...value];
     },
+    setRestart: (state) => {
+      state.values = [...value];
+      state.Xnumbers = [];
+
+      state.Onumbers = [];
+    },
   },
 });
-export const { addNumbers, addValues, setValues } = appSlice.actions;
+export const { addXnumbers, addOnumbers, addValues, setValues, setRestart } =
+  appSlice.actions;
 export default appSlice.reducer;

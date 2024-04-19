@@ -1,105 +1,191 @@
-import "./App.css";
 import { Box, Typography } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { addNumbers, addValues, setValues } from "./store/slices/appSlice";
-import { useEffect, useState } from "react";
+import "./App.css";
+import Home from "./components/Home";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRotateLeft, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { AnimatePresence, animate, motion } from "framer-motion";
+import { Opacity } from "@mui/icons-material";
+import { exit } from "process";
+import bonkSound from "./sound/bonkSound.mp3";
+import bonkImg from "./Img/bonkImg.jpg";
+import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+const animationVariants = {
+  start: {
+    rotate: 0,
+  },
+  end: {
+    rotate: -360,
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      // repeat: 10, // key frames to scale 1 to 1.1 for 10 times
+      repeatType: "loop" as const,
+    },
+  },
+};
+
+const containerVariants = {
+  start: {
+    // initial
+    opacity: 0,
+    y: -200,
+    rotateX: 0,
+  },
+  end: {
+    // animated
+    opacity: 1,
+    y: 0,
+    rotateX: 360,
+    transition: { delay: 1, duration: 0.4 },
+  },
+};
+
+const childVariants = {
+  start: {
+    opacity: 0,
+  },
+  end: {
+    opacity: 0.9,
+    transition: { delay: 3.5, duration: 0.8 },
+  },
+};
+
+const imgVariants = {
+  start: {
+    opacity: 0,
+  },
+  end: {
+    opacity: 0.9,
+    transition: { delay: 5.5, duration: 0 },
+  },
+  exit: { y: 50, transition: { delay: 0, duration: 0.8 } },
+};
 
 export default function App() {
-  const { numbers } = useAppSelector((state) => state.app);
-  const { values } = useAppSelector((state) => state.app);
-  const dispatch = useAppDispatch();
-  const [turn, setTurn] = useState<string>("X" || "O");
-  const items = values;
-
-  const winning = [
-    [1, 5, 9],
-    [3, 5, 7],
-    [1, 4, 7],
-    [2, 5, 8],
-    [3, 6, 9],
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-  ];
-  const handleCheck = () => {
-    const isSubset = winning.map((winArray) =>
-      winArray.every((num) => numbers.includes(num))
-    );
-    const isAnySubsetMatch = isSubset.some((subset) => subset);
-
-    //console.log("isSubset", isSubset);
-    //console.log("isAnySubsetMatch", isSubset);
-    //console.log("numbers.length", numbers.length);
-
-    if (numbers.length > 2) {
-      // i check at 2 cuz length started at 0
-      if (isAnySubsetMatch) {
-        console.log("victory");
-      } else {
-        console.log("defeat");
-      }
-    }
+  const [show, setShow] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const Navigate = useNavigate();
+  const handleSound = async () => {
+    await new Audio(bonkSound).play();
+    setShow(!show);
   };
-  useEffect(() => {
-    handleCheck();
-  }, [numbers]);
 
   useEffect(() => {
-    dispatch(setValues());
+    setTimeout(() => {
+      setShow(!show);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        Navigate("/home");
+      }, 5000);
+    }, 8500);
   }, []);
+  // useEffect(() => {
+  //   setTimeout(async () => {
+  //     try {
+  //       await new Audio(bonkSound).play();
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }, 3000);
+  // }, []);
 
-  const handleClick = (num: number) => {
-    dispatch(addNumbers(num));
-    turn === "X" ? setTurn("O") : setTurn("X");
-    dispatch(addValues({ number: num, toShow: turn }));
-  };
   return (
-    <Box className="container  ">
-      <Box className="top-bar">
-        <FontAwesomeIcon icon={faMoon} flip="horizontal" size="2xl" />
+    <Box className="loading-container">
+      {show && (
+        <div>
+          <motion.div className="flex  flex-col justify-center items-center">
+            <motion.div
+              className="text-6xl"
+              initial={{ opacity: 0, y: -200, rotateY: 0 }}
+              animate={{ opacity: 1, y: 0, rotateY: 180 }}
+              transition={{ delay: 2, duration: 0.4 }}
+            >
+              OX
+            </motion.div>
 
-        <FontAwesomeIcon icon={faArrowRotateLeft} size="2xl" />
-      </Box>
-      <Box className="text-center w-full">
-        <Typography variant="h3">Tic Tac Toe</Typography>
-        <Typography variant="h5">Player {turn}'s turn </Typography>
-      </Box>
-      <Box className="game-layout">
-        {items.map((item) => {
-          return (
-            <Box className="items" onClick={() => handleClick(item.number)}>
-              <Box className="text-3xl font-semibold text-white-text">
-                {item.toShow}
-              </Box>
-            </Box>
-          );
-        })}
-      </Box>
-      <Box className="flex justify-between w-full">
-        <Box className="totel-box">Player1</Box>
-        <Box className="totel-box"> TIES</Box>
-        <Box className="totel-box"> Player2</Box>
-      </Box>
+            <motion.div
+              variants={containerVariants}
+              initial="start"
+              animate="end"
+              className="text-6xl"
+            >
+              Tic Tac Toe
+            </motion.div>
+
+            <motion.p
+              variants={childVariants}
+              initial="start"
+              animate="end"
+              className="pt-8 text-xl"
+            >
+              created by Thin Yu Hlaing
+            </motion.p>
+          </motion.div>
+          <AnimatePresence>
+            <motion.img
+              variants={imgVariants}
+              initial="start"
+              animate="end"
+              src={bonkImg}
+              className="w-26 h-44 mt-5"
+              onClick={handleSound}
+              exit="exit"
+            />
+          </AnimatePresence>
+        </div>
+      )}
+      {loading && (
+        <Box className="flex justify-center items-center">
+          <Typography variant="h4" className="pr-5">
+            Loading
+          </Typography>
+          <motion.div
+            variants={animationVariants}
+            initial="start"
+            animate="end"
+            className="w-fit"
+          >
+            <FontAwesomeIcon icon={faSpinner} className="text-4xl " />
+          </motion.div>
+        </Box>
+      )}
     </Box>
   );
 }
-// const winning= [1,2,3]
-// const numbers = [6,2,3]
-// winning.every(num => numbers.includes(num))
+{
+  //importance
+  /* <Box className="flex justify-center items-center">
+<Typography variant="h4" className="pr-5">
+  Loading
+</Typography>
+<motion.div
+  variants={animationVariants}
+  initial="start"
+  animate="end"
+  className="w-fit"
+>
+  <FontAwesomeIcon icon={faSpinner} className="text-4xl " />
+</motion.div>
+</Box> */
+}
 
-// const winning = [
-//   [1, 5, 9],
-//   [3, 5, 7],
-//   [1, 4, 7],
-//   [2, 5, 8],
-//   [3, 6, 9],
-//   [1, 2, 3],
-//   [4, 5, 6],
-//   [7, 8, 9],
-// ];
-// const numbers = [1,2,3];
-
-// const results = winning.map(winArray => winArray.every(num => numbers.includes(num)));
-// console.log(results);
+{
+  /* <motion.div
+        variants={containerVariants}
+        initial="start"
+        animate="end"
+        className="flex  flex-col justify-center items-center"
+      >
+        <div className="text-6xl">Tic Tac Toe</div>
+        <motion.div
+          className="pt-5 text-xl"
+          variants={childVariants}
+          initial="start"
+          animate="end"
+        >
+          created by Thin Yu Hlaing
+        </motion.div>
+      </motion.div> */
+}
