@@ -6,18 +6,16 @@ import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setOuser, setXuser } from "../store/slices/userSlice";
-import punchSound from "../sound/punchSound.mp3";
-import bonkSound from "../sound/bonkSound.mp3";
+// import punchSound from "../sound/punchSound.mp3";
+// import bonkSound from "../sound/bonkSound.mp3";
 
 export default function Home() {
   const [X, setX] = useState<string>("");
   const [O, setO] = useState<string>("");
   const dispatch = useDispatch();
   const handleDispatch = () => {
-    new Audio(punchSound).play();
-
-    dispatch(X ? setXuser(X) : setXuser("X"));
-    dispatch(O ? setOuser(O) : setOuser("O"));
+    dispatch(X ? setXuser(X) : setXuser("Player1"));
+    dispatch(O ? setOuser(O) : setOuser("Player2"));
   };
   // function Play() {
   //   new Audio(punchSound).play();
@@ -27,7 +25,7 @@ export default function Home() {
       <h2 className="home-layout ">
         <Box className="self-center text-3xl">Enter Player names</Box>
         <Box>
-          <Box className="flex items-center justify-center mb-6 bg-white-bg pl-3">
+          <Box className="flex items-center justify-center mb-6 bg-light-bg pl-3">
             <FontAwesomeIcon icon={faX} size="xl" />
             <Input
               placeholder="Type in here…"
@@ -36,7 +34,7 @@ export default function Home() {
               onChange={(evt) => setX(evt.target.value)}
             />
           </Box>
-          <Box className="flex items-center justify-center  bg-white-bg pl-3">
+          <Box className="flex items-center justify-center  bg-light-bg pl-3">
             <FontAwesomeIcon icon={faO} size="xl" className="inline" />
             <Input
               placeholder="Type in here…"
@@ -47,7 +45,7 @@ export default function Home() {
           </Box>
         </Box>
         <Link to={"/play"} onClick={handleDispatch}>
-          <button className="px-5 h-10 rounded-3xl bg-white-text text-[#edf5fd] text-xl">
+          <button className="px-5 h-10 rounded-3xl bg-light-text text-[#edf5fd] text-xl">
             Start Game
           </button>
         </Link>

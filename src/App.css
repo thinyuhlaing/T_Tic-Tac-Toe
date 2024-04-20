@@ -3,40 +3,63 @@
 @tailwind utilities;
 
 body {
-  color: #0b4279;
+  @apply text-light-text;
+  @apply dark:text-dark-text;
 }
 
+/* / route */
+.loading-container {
+  @apply flex flex-col justify-center items-center w-full h-lvh;
+  @apply bg-light-bg text-light-text;
+}
+/* ----- */
+
+/*home route*/
+
+.home-container {
+  @apply h-lvh flex flex-col justify-center items-center  max-w-full;
+  @apply bg-light-bg;
+}
+.home-layout {
+  @apply items-center rounded-3xl flex flex-col  max-w-96 h-[23rem] justify-around p-6;
+  @apply text-light-text bg-light-color;
+}
+
+/* ----- */
+
+/*home route*/
 .top-bar {
   @apply flex justify-between w-full items-center;
 }
-.container {
-  @apply p-5 h-lvh pb-16 flex flex-col justify-between items-center bg-white-bg max-w-full;
-}
-.home-container {
-  @apply h-lvh flex flex-col justify-center items-center bg-white-bg max-w-full;
-}
-.home-layout {
-  @apply items-center rounded-3xl flex flex-col  w-10/12 h-[45%]  justify-around p-6;
-  @apply text-white-text bg-white-color;
+.game-container {
+  @apply p-5 h-lvh pb-16 flex flex-col justify-between items-center  max-w-full;
+  @apply bg-light-bg;
+  @apply dark:bg-dark-bg;
 }
 
 .game-layout {
   @apply w-full h-1/2 flex flex-wrap border-2;
-  @apply bg-white-color  border-white-text;
+  @apply bg-light-color  border-light-text;
+  @apply dark:bg-dark-color  dark:border-dark-text;
 }
-.items {
-  @apply flex justify-center items-center w-1/3 h-1/3;
-  @apply text-white-text  border-white-text border-2;
+.boxes {
+  @apply flex justify-center items-center w-1/3 h-1/3 border-2;
+  @apply text-light-text  border-light-text;
+  @apply dark:text-dark-text  dark:border-dark-text;
 }
-.totel-box {
+.boxes-text {
+  @apply text-4xl font-semibold;
+  @apply text-light-text;
+
+  @apply dark:text-dark-text;
+}
+.win-times-boxes {
   @apply w-28 h-20  rounded-2xl mt-3 flex flex-col justify-center items-center;
-  @apply bg-white-text text-white-bg;
+  @apply bg-light-text text-light-bg;
+  @apply dark:bg-dark-text dark:text-dark-bg;
 }
 
-.loading-container {
-  @apply flex flex-col justify-center items-center w-full h-lvh;
-  @apply bg-white-bg text-white-text;
-}
+/* ----- */
 
 /* white --> textColor-[#0B4279] bg-[#EDF5FD] color-[#D6C7F9] */
 /* dark --> textColor-[#86BDF4] bg-[#020A12] color-[#1B0C3E] */

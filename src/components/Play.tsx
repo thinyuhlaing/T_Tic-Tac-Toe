@@ -28,6 +28,15 @@ export default function Play() {
   const [XwinTime, setXwinTime] = useState<number>(0);
   const [OwinTime, setOwinTime] = useState<number>(0);
   const [drawTime, setdrawTime] = useState<number>(0);
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
 
   const winning = [
     [1, 5, 9],
@@ -57,7 +66,7 @@ export default function Play() {
       if (isAnySubsetMatch_X) {
         console.log("X victory");
         dispatch(setRestart());
-        setWinner(Xuser);
+        setWinner(`X : ${Xuser}`);
         setXwinTime(XwinTime + 1);
         return setOpen(true);
       }
@@ -65,7 +74,7 @@ export default function Play() {
       if (isAnySubsetMatch_O) {
         console.log("O victory");
         dispatch(setRestart());
-        setWinner(Ouser);
+        setWinner(`O : ${Ouser}`);
         setOwinTime(OwinTime + 1);
 
         return setOpen(true);
@@ -106,10 +115,15 @@ export default function Play() {
     dispatch(setRestart());
   };
   return (
-    <Box className="container  ">
+    <Box className="game-container ">
       <Box className="top-bar">
-        <FontAwesomeIcon icon={faMoon} flip="horizontal" size="2xl" />
-        <Box className=" rounded-2xl px-6 py-2 text-center bg-white-text text-white-bg">
+        <FontAwesomeIcon
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          icon={faMoon}
+          flip="horizontal"
+          size="2xl"
+        />
+        <Box className=" rounded-2xl px-6 py-2 text-center bg-light-text text-light-bg dark:bg-dark-text dark:text-dark-bg">
           <p className=" text-xl font-semibold">{turn}'s turn</p>
         </Box>
         <FontAwesomeIcon
@@ -124,24 +138,22 @@ export default function Play() {
       <Box className="game-layout">
         {items.map((item) => {
           return (
-            <Box className="items" onClick={() => handleClick(item.number)}>
-              <Box className="text-4xl font-semibold text-white-text">
-                {item.toShow}
-              </Box>
+            <Box className="boxes" onClick={() => handleClick(item.number)}>
+              <Box className="boxes-text">{item.toShow}</Box>
             </Box>
           );
         })}
       </Box>
       <Box className="flex justify-between w-full">
-        <Box className="totel-box">
+        <Box className="win-times-boxes">
           <p className=" text-sm">{Xuser}</p>
           <p className="text-xl font-semibold">{XwinTime}</p>
         </Box>
-        <Box className="totel-box">
+        <Box className="win-times-boxes">
           <p className=" text-sm">Draw</p>
           <p className="text-xl font-semibold">{drawTime}</p>
         </Box>
-        <Box className="totel-box">
+        <Box className="win-times-boxes">
           <p className=" text-sm">{Ouser}</p>
           <p className="text-xl font-semibold">{OwinTime}</p>
         </Box>
