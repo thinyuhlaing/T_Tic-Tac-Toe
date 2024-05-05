@@ -20,23 +20,15 @@ export default function Play() {
   const { values } = useAppSelector((state) => state.app);
   const dispatch = useAppDispatch();
   const [turn, setTurn] = useState<string>("X" || "O");
-  const [userturn, setUserTurn] = useState<string>("");
+  const [playerturn, setPlayerTurn] = useState<string>("");
   const items = values;
-  const { Xuser } = useAppSelector((state) => state.user);
-  const { Ouser } = useAppSelector((state) => state.user);
+  const { XPlayer } = useAppSelector((state) => state.user);
+  const { OPlayer } = useAppSelector((state) => state.user);
   const [winner, setWinner] = useState<string>("");
   const [XwinTime, setXwinTime] = useState<number>(0);
   const [OwinTime, setOwinTime] = useState<number>(0);
-  const [drawTime, setdrawTime] = useState<number>(0);
+  const [drawTime, setDrawTime] = useState<number>(0);
   const [theme, setTheme] = useState("light");
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
 
   const winning = [
     [1, 5, 9],
@@ -54,66 +46,81 @@ export default function Play() {
       winArray.every((num) => Xnumbers.includes(num))
     );
     const isAnySubsetMatch_X = isSubset_X.some((subset) => subset);
+
     const isSubset_O = winning.map((winArray) =>
       winArray.every((num) => Onumbers.includes(num))
     );
     const isAnySubsetMatch_O = isSubset_O.some((subset) => subset);
-    if (Xnumbers.length > 2 || Onumbers.length > 2) {
-      console.log("O", isSubset_O);
-      console.log("X", isSubset_X);
 
-      // i check at 2 cuz length started at 0
+    if (Xnumbers.length > 2 || Onumbers.length > 2) {
       if (isAnySubsetMatch_X) {
-        console.log("X victory");
+        // Xplayer victory
         dispatch(setRestart());
-        setWinner(`X : ${Xuser}`);
+        setWinner(`Xplayer: ${XPlayer}`);
         setXwinTime(XwinTime + 1);
         return setOpen(true);
       }
 
       if (isAnySubsetMatch_O) {
-        console.log("O victory");
+        // Oplayer victory
         dispatch(setRestart());
-        setWinner(`O : ${Ouser}`);
+        setWinner(`Oplayer : ${OPlayer}`);
         setOwinTime(OwinTime + 1);
-
         return setOpen(true);
       }
-      if (Xnumbers.length + Onumbers.length === 9) {
+
+      if (
+        Xnumbers.length + Onumbers.length === 9 &&
+        !isAnySubsetMatch_X &&
+        !isAnySubsetMatch_O
+      ) {
+        // Draw
         dispatch(setRestart());
         setWinner("win-win");
-        setdrawTime(drawTime + 1);
+        setDrawTime(drawTime + 1);
         return setOpen(true);
       }
       return;
     }
   };
 
-  useEffect(() => {
-    handleCheck();
+  const handleClick = (item: { number: number; toShow: string }) => {
+    if (!item.toShow) {
+      if (turn === "X") {
+        dispatch(addXnumbers(item.number));
+        setTurn("O");
+      } else {
+        dispatch(addOnumbers(item.number));
+        setTurn("X");
+      }
 
-    turn === "X" ? setUserTurn(Xuser) : setUserTurn(Ouser);
-  }, [Xnumbers, Onumbers]);
-
-  useEffect(() => {
-    dispatch(setValues());
-  }, []);
-
-  const handleClick = (num: number) => {
-    if (turn === "X") {
-      dispatch(addXnumbers(num));
-      setTurn("O");
+      dispatch(addValues({ number: item.number, toShow: turn }));
     } else {
-      dispatch(addOnumbers(num));
-      setTurn("X");
+      return;
     }
-
-    dispatch(addValues({ number: num, toShow: turn }));
   };
 
   const handleRestart = () => {
     dispatch(setRestart());
   };
+
+  useEffect(() => {
+    handleCheck();
+    turn === "X" ? setPlayerTurn(XPlayer) : setPlayerTurn(OPlayer);
+  }, [Xnumbers, Onumbers]);
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    dispatch(setValues());
+  }, []);
+
   return (
     <Box className="game-container ">
       <Box className="top-bar">
@@ -133,12 +140,12 @@ export default function Play() {
         />
       </Box>
       <Box className="text-center w-full">
-        <Typography variant="h4"> {userturn}'s turn</Typography>
+        <Typography variant="h4"> {playerturn}'s turn</Typography>
       </Box>
       <Box className="game-layout">
         {items.map((item) => {
           return (
-            <Box className="boxes" onClick={() => handleClick(item.number)}>
+            <Box className="boxes" onClick={() => handleClick(item)}>
               <Box className="boxes-text">{item.toShow}</Box>
             </Box>
           );
@@ -146,7 +153,7 @@ export default function Play() {
       </Box>
       <Box className="flex justify-between w-full">
         <Box className="win-times-boxes">
-          <p className=" text-sm">{Xuser}</p>
+          <p className=" text-sm">{XPlayer}</p>
           <p className="text-xl font-semibold">{XwinTime}</p>
         </Box>
         <Box className="win-times-boxes">
@@ -154,17 +161,14 @@ export default function Play() {
           <p className="text-xl font-semibold">{drawTime}</p>
         </Box>
         <Box className="win-times-boxes">
-          <p className=" text-sm">{Ouser}</p>
+          <p className=" text-sm">{OPlayer}</p>
           <p className="text-xl font-semibold">{OwinTime}</p>
         </Box>
       </Box>
-      <AppDialog open={open} setOpen={setOpen} Player={winner} />
+      <AppDialog open={open} setOpen={setOpen} winner={winner} />
     </Box>
   );
 }
-// const winning= [1,2,3]
-// const Clicknumbers = [6,2,3]
-// winning.every(num => Clicknumbers.includes(num))
 
 // const winning = [
 //   [1, 5, 9],
@@ -178,5 +182,24 @@ export default function Play() {
 // ];
 // const Clicknumbers = [1,2,3];
 
-// const results = winning.map(winArray => winArray.every(num => Clicknumbers.includes(num)));
-// console.log(results);
+// const isSubset = winning.map(winArray => winArray.every(num => Clicknumbers.includes(num)));
+// console.log(isSubset) --> (8) [false, false, false, false, false, true, false, false]
+
+// const isAnySubsetMatch = isSubset.some((subset) => subset);
+// console.log(isAnySubsetMatch) --> true
+
+/*  every and some method */
+
+// every
+
+// const winning= [1,2,3]
+// const Clicknumbers = [6,2,3]
+// winning.every(num => Clicknumbers.includes(num))
+// flase --> cuz need to be true every numbers
+
+// some
+
+// const winning= [1,2,3]
+// const Clicknumbers = [6,2,3]
+// winning.some(num => Clicknumbers.includes(num))
+// true --> cuz don't need to be correct all of them, just need to be ture one of them

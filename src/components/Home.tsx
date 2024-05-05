@@ -5,21 +5,20 @@ import { faO, faX } from "@fortawesome/free-solid-svg-icons";
 import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setOuser, setXuser } from "../store/slices/userSlice";
+import { setOPlayer, setXPlayer } from "../store/slices/userSlice";
 // import punchSound from "../sound/punchSound.mp3";
 // import bonkSound from "../sound/bonkSound.mp3";
 
 export default function Home() {
-  const [X, setX] = useState<string>("");
-  const [O, setO] = useState<string>("");
+  const [Xname, setXname] = useState<string>("");
+  const [Oname, setOname] = useState<string>("");
   const dispatch = useDispatch();
+
   const handleDispatch = () => {
-    dispatch(X ? setXuser(X) : setXuser("Player1"));
-    dispatch(O ? setOuser(O) : setOuser("Player2"));
+    dispatch(Xname ? setXPlayer(Xname) : setXPlayer("Player1"));
+    dispatch(Oname ? setOPlayer(Oname) : setOPlayer("Player2"));
   };
-  // function Play() {
-  //   new Audio(punchSound).play();
-  // }
+
   return (
     <Box className="home-container">
       <h2 className="home-layout ">
@@ -31,7 +30,7 @@ export default function Home() {
               placeholder="Type in here…"
               variant="outlined"
               className="py-2 ml-3 w-full "
-              onChange={(evt) => setX(evt.target.value)}
+              onChange={(evt) => setXname(evt.target.value)}
             />
           </Box>
           <Box className="flex items-center justify-center  bg-light-bg pl-3">
@@ -40,7 +39,7 @@ export default function Home() {
               placeholder="Type in here…"
               variant="outlined"
               className="py-2 ml-3 w-full"
-              onChange={(evt) => setO(evt.target.value)}
+              onChange={(evt) => setOname(evt.target.value)}
             />
           </Box>
         </Box>
@@ -52,4 +51,11 @@ export default function Home() {
       </h2>
     </Box>
   );
+}
+
+{
+  /*
+
+
+*/
 }

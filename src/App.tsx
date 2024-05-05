@@ -6,7 +6,6 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, animate, motion } from "framer-motion";
 import { Opacity } from "@mui/icons-material";
 import { exit } from "process";
-import bonkSound from "./sound/bonkSound.mp3";
 import bonkImg from "./Img/bonkImg.jpg";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -66,10 +65,6 @@ export default function App() {
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const Navigate = useNavigate();
-  const handleSound = async () => {
-    await new Audio(bonkSound).play();
-    setShow(!show);
-  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -79,7 +74,7 @@ export default function App() {
         setLoading(false);
         Navigate("/home");
       }, 5000);
-    }, 8500);
+    }, 9000);
   }, []);
   // useEffect(() => {
   //   setTimeout(async () => {
@@ -102,14 +97,14 @@ export default function App() {
               animate={{ opacity: 1, y: 0, rotateY: 180 }}
               transition={{ delay: 2, duration: 0.4 }}
             >
-              OX
+              XO
             </motion.div>
 
             <motion.div
               variants={containerVariants}
               initial="start"
               animate="end"
-              className="text-6xl"
+              className="text-6xl mt-2"
             >
               Tic Tac Toe
             </motion.div>
@@ -130,7 +125,6 @@ export default function App() {
               animate="end"
               src={bonkImg}
               className="w-26 h-44 mt-5"
-              onClick={handleSound}
               exit="exit"
             />
           </AnimatePresence>

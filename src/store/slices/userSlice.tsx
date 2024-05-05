@@ -1,14 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface AppSlice {
-  Xuser: string;
-  Ouser: string;
+  XPlayer: string;
+  OPlayer: string;
   isLoading: boolean;
   error: string | null;
 }
 const initialState: AppSlice = {
-  Xuser: "",
-  Ouser: "",
+  XPlayer: "",
+  OPlayer: "",
   isLoading: false,
   error: null,
 };
@@ -16,13 +16,13 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setXuser: (state, action: PayloadAction<string>) => {
-      state.Xuser = action.payload;
+    setXPlayer: (state, action: PayloadAction<string>) => {
+      state.XPlayer = action.payload;
     },
-    setOuser: (state, action: PayloadAction<string>) => {
-      state.Ouser = action.payload;
+    setOPlayer: (state, action: PayloadAction<string>) => {
+      state.OPlayer = action.payload;
     },
   },
 });
-export const { setXuser, setOuser } = userSlice.actions;
+export const { setXPlayer, setOPlayer } = userSlice.actions;
 export default userSlice.reducer;
