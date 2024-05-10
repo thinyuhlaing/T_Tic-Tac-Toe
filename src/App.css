@@ -32,11 +32,10 @@ body {
   @apply flex justify-between w-full items-center;
 }
 .game-container {
-  @apply p-5 h-lvh pb-16 flex flex-col justify-between items-center  max-w-full;
+  @apply p-5 md:px-36 xl:px-[28rem]  h-lvh pb-16 flex flex-col justify-between items-center  max-w-full;
   @apply bg-light-bg;
   @apply dark:bg-dark-bg;
 }
-
 .game-layout {
   @apply w-full h-1/2 flex flex-wrap border-2;
   @apply bg-light-color  border-light-text;
